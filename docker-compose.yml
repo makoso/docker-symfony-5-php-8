@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  db:
+    image: postgres:10-alpine
+    environment:
+      - POSTGRES_DB=db
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=dbpass
+    volumes:
+      - ./docker/data/db:/var/lib/postgresql/data:rw
+    ports:
+      - 9059:5432
+  php:
+    build:
+      context: .
+      dockerfile: docker/build/php/Dockerfile
+    volumes:
+      - ./:/var/www
+      - ./docker/data/logs/symfony:/var/www/var/logs
+      - ./docker/data/logs/supervisor:/var/log/
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/build/nginx/Dockerfile
+    ports:
+      - 8070:80
+    volumes_from:
+      - php
+    volumes:
+      - ./docker/data/logs/nginx/:/var/log/nginx

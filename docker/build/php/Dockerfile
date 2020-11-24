@@ -1,5 +1,5 @@
 FROM composer:2
-FROM php:8.0-rc-fpm-alpine3.12
+FROM php:8.0.0RC5-fpm-alpine3.12
 
 RUN set -xe && apk add --no-cache --virtual .build-deps \
 		$PHPIZE_DEPS \
